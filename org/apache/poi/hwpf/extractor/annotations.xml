@@ -1,0 +1,5 @@
+<root>
+    <item name='org.apache.poi.hwpf.extractor.WordExtractor'>
+        <annotation name='java.lang.Deprecated'/>
+    </item>
+</root>
