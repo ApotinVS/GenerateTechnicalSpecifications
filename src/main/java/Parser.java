@@ -56,16 +56,16 @@ public class Parser {
         return paragraphs;
     }
 
-    public static void CopyTU (String path, String filename) throws InvalidFormatException, IOException {
+    public static void CopyTU (String path, String path1, String filename) throws InvalidFormatException, IOException {
         File docFile = new File(path);
         FileInputStream finStream = new FileInputStream(docFile.getAbsolutePath());
         HWPFDocument doc=new HWPFDocument(finStream);
         WordExtractor wordExtract=new WordExtractor(doc);
-        doc.write(new FileOutputStream("C:\\Users\\ApotinV\\Desktop\\GenerateTechnicalSpecifications\\" + filename
+        doc.write(new FileOutputStream(path1 + "\\" + filename
         + "\\" +filename+".doc"));
     }
 
-    public static void ChengePattern(Paragraphs paragraphs, String path, String filename) throws FileNotFoundException, IOException, InvalidFormatException {
+    public static void ChengePattern(Paragraphs paragraphs, String path,String path1, String filename) throws FileNotFoundException, IOException, InvalidFormatException {
 
         XWPFDocument doc = new XWPFDocument(OPCPackage.open(path));
         for (XWPFParagraph p : doc.getParagraphs()) {
@@ -103,7 +103,8 @@ public class Parser {
                    text = paragraphs.numberTP+":";
                    run.setBold(true);
                }
-               else if (sb.toString().contains("Предусмотреть в КТП")){
+               else if (sb.toString().contains("Предусмотреть в КТП") &&
+                       !sb.toString().contains("Предусмотреть в КТП-потребителя")){
                    text = paragraphs.numberTP+":";
                    run.setBold(true);
                }
@@ -113,7 +114,8 @@ public class Parser {
                else if (sb.toString().contains("Установить в КТП ")){
                    text = paragraphs.numberTP+" шкаф АСКУЭ заводского исполнения. В шкафу смонтировать:";
                }
-               else if (sb.toString().contains("Необходимое оборудование ")){
+               else if ((sb.toString().contains("Необходимое оборудование ") &&
+                       !sb.toString().contains("КТП-потребителя")) || sb.toString().contains("Для монтажа в ТП № ")){
                    text = paragraphs.numberTP+":";
                    run.setFontSize(11);
                    run.setBold(true);
@@ -124,7 +126,7 @@ public class Parser {
                
             }
         }
-        File folder = new File("C:\\Users\\ApotinV\\Desktop\\GenerateTechnicalSpecifications\\" + filename);
+        File folder = new File(path1 + "\\" + filename);
         folder.mkdir();
         doc.write(new FileOutputStream(folder+"\\"+"тех требования "+filename+".docx"));
 
