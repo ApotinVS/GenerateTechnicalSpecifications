@@ -40,13 +40,13 @@ public class Parser {
                 paragraphs.function = dataArray[i];
                 paragraphs.function2 = dataArray[i + 1];
             }
-            if (dataArray[i].contains("Выданы")){
+            if (dataArray[i].contains("Выдан")){
                 paragraphs.subscriber = dataArray[i].substring(dataArray[i].indexOf(": ")+2);
             }
             if (dataArray[i].contains("Место расположения объекта")){
                 paragraphs.address = dataArray[i].substring(dataArray[i].indexOf(": ")+2);
             }
-            if (dataArray[i].contains("присоединения:")){
+            if (dataArray[i].contains("Точк") && dataArray[i].contains("присоединения:")){
                 paragraphs.point = dataArray[i].substring(dataArray[i].indexOf(": ")+2);
             }
 
@@ -61,8 +61,8 @@ public class Parser {
         FileInputStream finStream = new FileInputStream(docFile.getAbsolutePath());
         HWPFDocument doc=new HWPFDocument(finStream);
         WordExtractor wordExtract=new WordExtractor(doc);
-        doc.write(new FileOutputStream(path1 + "\\" + filename
-        + "\\" +filename+".doc"));
+        doc.write(new FileOutputStream(path1 + "\\" + filename.substring(0,filename.indexOf(".doc"))
+        + "\\" +filename));
     }
 
     public static void ChengePattern(Paragraphs paragraphs, String path,String path1, String filename) throws FileNotFoundException, IOException, InvalidFormatException {
@@ -80,11 +80,24 @@ public class Parser {
                XWPFRun run = p.createRun();
 
                if (sb.toString().contains("Выданы:")) {
+                   if (paragraphs.subscriber == (null)){
+                       text = "!!!!!!!";
+                   run.setColor("ff0000");
+                   }else
                     text = paragraphs.subscriber;
                }
                else if (sb.toString().contains("ТУ №")){
+                   if (paragraphs.numberTU == (null)){
+                       text = "!!!!!!!";
+                       run.setColor("ff0000");
+                   }else
                    text = paragraphs.numberTU;
                } else if (sb.toString().contains("Т Е Х Н И Ч Е С К И Е   Т Р Е Б О В А Н И Я")){
+                   run.addBreak();
+                   if (paragraphs.function == (null)){
+                       text = "!!!!!!!";
+                       run.setColor("ff0000");
+                   }else{
                    run.addBreak();
                    text = paragraphs.function;
                    run.setBold(true);
@@ -92,30 +105,65 @@ public class Parser {
                    run.addBreak();
                    text = paragraphs.function2;
                    run.setBold(true);
+                   }
                }
                else if (sb.toString().contains("Место расположения объекта: ")){
+                   if (paragraphs.address == (null)){
+                       text = "!!!!!!!";
+                       run.setColor("ff0000");
+                   }else
                     text = paragraphs.address;
                }
                else if (sb.toString().contains("Точка присоединения: ")){
+                   if (paragraphs.point == (null)){
+                       text = "!!!!!!!";
+                       run.setColor("ff0000");
+                   }else
                    text = paragraphs.point;
                }
                else if (sb.toString().contains("Предусмотреть в ТП-")){
+                   if (paragraphs.numberTP == (null)){
+                       text = "!!!!!!!";
+                       run.setColor("ff0000");
+                   }else
                    text = paragraphs.numberTP+":";
                    run.setBold(true);
                }
                else if (sb.toString().contains("Предусмотреть в КТП") &&
                        !sb.toString().contains("Предусмотреть в КТП-потребителя")){
+                   if (paragraphs.numberTP == (null)){
+                       text = "!!!!!!!";
+                       run.setColor("ff0000");
+                   }else
                    text = paragraphs.numberTP+":";
                    run.setBold(true);
                }
                else if (sb.toString().contains("Установить в ТП-")){
+                   if (paragraphs.numberTP == (null)){
+                       text = "!!!!!!! ";
+                       run.setText(text);
+                       run.setColor("ff0000");
+                       text = "шкаф АСКУЭ заводского исполнения. В шкафу смонтировать:";
+                       run.setColor("000000");
+                   }else
                    text = paragraphs.numberTP+" шкаф АСКУЭ заводского исполнения. В шкафу смонтировать:";
-               }
+           }
                else if (sb.toString().contains("Установить в КТП ")){
+                   if (paragraphs.numberTP == (null)){
+                       text = "!!!!!!! ";
+                       run.setText(text);
+                       run.setColor("ff0000");
+                       text = "шкаф АСКУЭ заводского исполнения. В шкафу смонтировать:";
+                       run.setColor("000000");
+                   }else
                    text = paragraphs.numberTP+" шкаф АСКУЭ заводского исполнения. В шкафу смонтировать:";
                }
                else if ((sb.toString().contains("Необходимое оборудование ") &&
                        !sb.toString().contains("КТП-потребителя")) || sb.toString().contains("Для монтажа в ТП № ")){
+                   if (paragraphs.numberTP == (null)){
+                       text = "!!!!!!!";
+                       run.setColor("ff0000");
+                   }else
                    text = paragraphs.numberTP+":";
                    run.setFontSize(11);
                    run.setBold(true);
@@ -126,9 +174,9 @@ public class Parser {
                
             }
         }
-        File folder = new File(path1 + "\\" + filename);
+        File folder = new File(path1 + "\\" + filename.substring(0,filename.indexOf(".doc")));
         folder.mkdir();
-        doc.write(new FileOutputStream(folder+"\\"+"тех требования "+filename+".docx"));
+        doc.write(new FileOutputStream(folder+"\\"+"тех требования "+filename.substring(0,filename.indexOf(".doc"))+".docx"));
 
     }
 }

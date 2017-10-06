@@ -1,16 +1,22 @@
+
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.File;
 
 public class CoveringWindow extends JFrame implements ActionListener {
     private JPanel rootPanel;
     private JTextField TextField1;
     private JTextField TextField2;
     private JTextField TextField3;
+    private JButton Button1;
+    private JButton Button2;
+    private JButton Button3;
     private JMenuBar menuBar;
     private JMenu menu;
     private JMenu submenuNK;
@@ -45,19 +51,66 @@ public class CoveringWindow extends JFrame implements ActionListener {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         CreateMenu();
+
+
+
+        Button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JFileChooser fileChooser = new JFileChooser("\\\\192.168.4.99\\temp\\ОАСКУЭ\\ОАСКУЭ-04\\___Тех условия и тех требования");
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                int ret = fileChooser.showDialog(null, "Открыть файл");
+                if (ret == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    TextField1.setText(file.getAbsolutePath());
+                }
+            }
+        });
+
+        Button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JFileChooser fileChooser = new JFileChooser("\\\\192.168.4.99\\oaskue_bp\\АСКУЭ 0,4кВ\\___Тех условия и тех требования");
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                int ret = fileChooser.showDialog(null, "Открыть файл");
+                if (ret == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    TextField3.setText(file.getAbsolutePath());
+                }
+            }
+        });
+
+        Button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JFileChooser fileChooser = new JFileChooser(TextField1.getText());
+                FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                        "Word", "doc");
+                fileChooser.setFileFilter(filter);
+                int ret = fileChooser.showDialog(null, "Открыть файл");
+                if (ret == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    TextField2.setText(file.getName());
+                }
+            }
+        });
+
+
+
         setPreferredSize(new Dimension(640, 480));
         pack();
         setVisible(true);
 
     }
+
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             try {
-                Paragraphs paragraphs = Parser.Parse(TextField1.getText()+"\\"+TextField2.getText()+".doc");
+                Paragraphs paragraphs = Parser.Parse(TextField1.getText()+"\\"+TextField2.getText());
                 Parser.ChengePattern(paragraphs, actionEvent.getActionCommand(), TextField3.getText(),
                         TextField2.getText());
-                Parser.CopyTU(TextField1.getText()+"\\"+TextField2.getText()+".doc",
+                Parser.CopyTU(TextField1.getText()+"\\"+TextField2.getText(),
                         TextField3.getText(), TextField2.getText());
                 JOptionPane.showMessageDialog(null,
                         "Сэр / Сэрина, есть, Сэр / Сэрина. Все готово! \n Не забудь занести в Excel");
@@ -68,6 +121,7 @@ public class CoveringWindow extends JFrame implements ActionListener {
             }
         }
     };
+
 
     public void CreateMenu (){
 
