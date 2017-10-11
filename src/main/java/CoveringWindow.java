@@ -135,7 +135,7 @@ public class CoveringWindow extends JFrame implements ActionListener {
 
         item20004Nothing = new JMenuItem("200.04, 1 конц");
         item20004Nothing.setActionCommand("\\\\192.168.4.99\\oaskue_bp\\АСКУЭ 0,4кВ" +
-                "\\___Тех условия и тех требования\\Шаблоны\\в ТП жарыка\\200.04, ничего не прописано.docx");
+                "\\___Тех условия и тех требования\\Шаблоны\\в ТП жарыка\\200.04, 1 конц.docx");
         item20004Nothing.addActionListener(actionListener);
         submenuTP.add(item20004Nothing);
 

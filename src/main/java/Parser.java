@@ -98,7 +98,6 @@ public class Parser {
                        text = "!!!!!!!";
                        run.setColor("ff0000");
                    }else{
-                   run.addBreak();
                    text = paragraphs.function;
                    run.setBold(true);
                    run.setText(text);
